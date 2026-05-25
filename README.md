@@ -45,3 +45,34 @@
 - 実行ユーザはroot以外
 - Dockerのベストプラクティス
     https://docs.docker.jp/engine/articles/dockerfile_best-practice.html
+
+- マルチステージビルド
+    - Dockerイメージを`build`用と`実行`用とに分けて、最終imageを小さく・安全にする手法
+        - 余計なコンパイルツールがないことはセキュリティ的にも望ましい
+    - golang:1.14.1-alpine3.11
+        - alpineイメージをベースとしてつくられた小さなイメージ
+        - しかし、Goのコンパイルツールがふくまれており、イメージのサイズは大きくなる
+        - マルチステージビルドを利用することでイメージを小さくできる
+        ```
+        # Stage1のコンテナ（アプリケーションをコンパイル）
+        FROM golang:1.14.1-alpine3.11 as builder
+        COPY ./main.go ./
+        RUN go build -o /go-app ./main.go
+        # Stage2のコンテナ（コンパイルしたバイナリを内包した実行用コンテナ）
+        FROM alpine:3.11
+        # Stage1でコンパイルした成果物をコピー
+        COPY --from=builder /go-app .
+        ENTRYPOINT ["./go-app"]
+        ```
+        - BuildKitを使うことで、ビルドステップの依存関係を自動判別し、ビルドステップをへいれてうに処理することも可能
+
+- イメージレイヤの統合とイメージの縮小化
+    - Dive
+        https://github.com/wagoodman/dive
+        Dockerイメージ
+
+- docker hubへイメージをプッシュ
+```
+docker image tag sample-image:0.1 kawatayoko2/sample-image:0.1
+docker image push kawatayoko2/sample-image:0.1
+```
