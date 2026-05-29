@@ -76,3 +76,43 @@
 docker image tag sample-image:0.1 kawatayoko2/sample-image:0.1
 docker image push kawatayoko2/sample-image:0.1
 ```
+
+# 第2章
+- Kubernetes はコンテナ化あれたアプリケーションのデプロイ、スケーリングなどの管理を自動化するためのプラットフォーム（コンテナオーケストレーションエンジン）
+    - Kubernetes以外だと以下がある
+        - Docker Swarm mode
+        - Apatch Mesos
+    - もともとはGoogle社内で利用されていたコンテナクラスタマネージャの`Borg`のアイデアをもとに作られた
+    - マネージドサービス
+        - GKE
+            Google Kubernetes Engine
+        - AKS
+            Azure Container
+        - EKS
+            Amazon Elastic Kubernetes Service
+- Kubernetesでできること
+    - コンテナとは「なんらかのアプリケーションを実行するようビルドされたコンテナイメージをもとに起動されたワークロード」
+    - 宣言的なコードによる管理（Infrastructure as Code）
+    - スケーリング・オートスケーリング
+        Kubernetesはコンテナクラスタ（Kubernetesクラスタ）を形成して、複数のKubernetes Nodeを管理する。
+    - スケジューリング
+        どのNodeにコンテナを配置するかを決定する
+        アベイラビリティゾーンを識別する情報を不可して、マルチゾーンにコンテナを分散配置可能
+    - リソース管理
+        NodeのCPUやメモリの空きリソースを考慮してコンテナを配置する
+    - セルフヒーリング
+        標準でコンテナのプロセス監視を行っている
+        プロセスの停止を検知すると自動でコンテナを再デプロイする
+    - ロードバランシングとサービスディスカバリ
+        - Service, Ingressといったロードバランシング機能
+            条件に合致するコンテナ群に対してルーティングを行うエンドポイントを払い出すことができる
+        - 個々のマイクロサービスがお互いのマイクロサービスを参照する際にサービスディスカバリ鬼王が役立つ
+    - データの管理
+        - バックエンドのデータストアにetcdを採用
+            etcdはクラスタを組むことで冗長化できる
+        - Kubernetes対応しているミドルウェア
+            - Ansible
+                Kubernetesへのコンテナデプロイ
+            - Apache Ignite
+            - Fluentd
+
