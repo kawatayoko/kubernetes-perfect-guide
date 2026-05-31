@@ -115,4 +115,47 @@ docker image push kawatayoko2/sample-image:0.1
                 Kubernetesへのコンテナデプロイ
             - Apache Ignite
             - Fluentd
+            など
+# 第３章
+- Kubernetesクラスタ
+    - ローカルKubernetes
+        ユーザーの手元のマシン１代に構築して使用する
+        個人での動作確認や開発環境としての利用い適している
+        冗長化されていないためプロダクション環境には適していない
+        - Minikube
+            - 手元のマシン常にローカルKubernetesを簡単に構築・実行できるツール
+            - 実行されるKuvernetesはシングルノード構成
+            - ローカルの仮想マシン上にKubernetesをインストールするためハイパーバイザーが必要
+            - ハイパーバイザー
+                - Mac
+                Docker/HyperKit driver/VirtualBox/Parallels/VMware/Fusion/Podman
+                - Linux
+                Docker/VirtualBox/Podman/KVM/Baremetal(systemd-based)
+                - Windows
+                Docker/VirtualBox/Hyper-V
+            - minikubeを動かす
+            ```
+            brew intall minikube
+            minikube start --driver=docker
+            minikube status
+            # このときKuvernetesクラスタは、Docker常に起動されたマシンの中で動作している
+            # これ以降はkubectlを使用してMinikubeクラスタの操作が可能
+            # 以下のコマンドでContextを切り替えると、それ以降はkubectlでMinikubeのクラスタを操作することが可能（複数のクラスタを利用している場合にはkubectlのContextを切り替えて利用する必要がある）
+            kubectl config use-context minikube
+            # Minikubeの削除
+            minikube delete
+            ```
 
+        - Docker Desktop for Mac / Windows
+        - kind (Kubernetes in Docker)
+    - Kubernetes構築ツール
+        ツールを利用して任意の環境（オンプレ・クラウド）に裏スタを構築して使用する
+        オンプレミス常にKubernetesをデプロイするケースや細かいカスタマイズを行いたい場合は、Kubernetes構築ツールを利用する
+        - kubeadm
+        - Rancher
+    - マネージドKubernetesサービス
+        パブリッククラウド常のマネージドサービスとして提供されるクラスタを利用
+        基本的にマネージドKubernetesサービスが利用できる場合は、これを利用する。
+        - GKE
+        - AKS
+        - EKS
