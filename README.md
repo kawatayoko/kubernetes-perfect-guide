@@ -145,9 +145,26 @@ docker image push kawatayoko2/sample-image:0.1
             # Minikubeの削除
             minikube delete
             ```
-
         - Docker Desktop for Mac / Windows
         - kind (Kubernetes in Docker)
+            - Kubernete自体の開発のために作られたツール
+                - SIG-Testingという分科会で作られた。
+            - Dockerコンテナを複数個起動し、そのコンテナをKubernetes Node　として利用することで、複数台構成のKubernetesクラスタを構築する
+            - ローカル環境でマルチノードクラスタを構築するいはKindが一番よい
+            - クラスタ構築はYAMLファイルで管理可能
+                - kindで利用するDockerイメージはDocker Hubのkindest Organizationで管理されている
+            ```
+            kind create cluster --donfig kind.yaml --name kindcluster
+            # contextの切り替え
+            kubectl config use-context kind-kindcluster 
+            # kindクラスタの削除
+            kind delete cluster --name kindcluster
+            ```
+            - FeatureGetes
+                Kubernetesの機能を有効化・無効化するための仕組み
+                基本的にベータ以上のステータスになった機能についてはデフォルトで有効化される
+                アルファステータスの機能については明治的に有効化する必要がある
+                FeatureGateを確認するだけで、Kubernetesの新しい機能を把握することができる
     - Kubernetes構築ツール
         ツールを利用して任意の環境（オンプレ・クラウド）に裏スタを構築して使用する
         オンプレミス常にKubernetesをデプロイするケースや細かいカスタマイズを行いたい場合は、Kubernetes構築ツールを利用する
@@ -159,3 +176,23 @@ docker image push kawatayoko2/sample-image:0.1
         - GKE
         - AKS
         - EKS
+
+- Kubernetesのサービスレベル目標
+    - Kubernetesではスケーラビリティに関して`SIG-Scalability`という分科会で議論されている
+        - サービスレベル指標（SLI：Service Level Indicator）
+        - サービスレベル目標（SLO：Service Level Objectice）
+        を定義している
+        - https://github.com/kubernetes/community/blob/main/sig-scalability/slos/slos.md
+            - APIの応答性
+                - 単一オブジェクトの変更：APIリクエストにおいて、過去５分間のうち99%が1秒以内に帰ってくること
+                - 非ストリーミングの取得：APIリクエストにおいて過去５分間のうち99%が下記の秒数以内にかえってくること
+                    - 特定リソース 1秒
+                    - Namespace 全体
+                    - クラスタ全体 30秒
+            - Podの起動時間
+                - 過去５分間のうち99%が5秒以内に起動すること
+                (イメージのPull時間やinitContainerの処理時間は含まない)
+            - https://github.com/kubernetes/community/blob/main/sig-scalability/configs-and-limits/thresholds.md
+    - 構築ツールを使って構築する場合、自分でKubernetes Masterのインスタンスサイズを決める必要がある
+        - Kubernetes公式の自動構築スクリプト`kube-up`を利用してGCPやAWS上にクラスタを構築する場合にしようされるインスタンスサイズの目安が公開されている
+            https://kubernetes.io/docs/setup/best-practices/cluster-large/
