@@ -196,30 +196,47 @@ docker image push kawatayoko2/sample-image:0.1
     - 構築ツールを使って構築する場合、自分でKubernetes Masterのインスタンスサイズを決める必要がある
         - Kubernetes公式の自動構築スクリプト`kube-up`を利用してGCPやAWS上にクラスタを構築する場合にしようされるインスタンスサイズの目安が公開されている
             https://kubernetes.io/docs/setup/best-practices/cluster-large/
-- kubeadm
-    Kubernetesが公式に提供している構築ツール
-- Flannel
-    - 基本的にDockerで起動したコンテナに付与されるIPアドレスはホストの外から疎通性のないInternalIPとなる。
-        - ノードを跨いでコンテナ同士が通信することはできない
-        - マルチノードのKubernetesクラスタとして成立させるには、各ホストのInternal Networkの接続性を確保する必要がある
-    - それらを解決する方法としてFlannelがある
-        - Flannelはノード間を繋ぐネットワークにかそうて系なトンネル（オーバーレイネットワーク）を構成する
-        - それによりKubernetesクラスタ内のPod同士の通信を実現する
-    - Flannel以外にもPodネットワークを実現する手段は複数ある
-- Rancher
-    - オープンソースのコンテナプラットフォーム
-        - Rancher Labs社
-    - Rancher 2.0の特徴
-        - 複数クラスタの統合管理
-        - Kubernetesクラスタをさまざまなプラットフォームにデプロイ
-            - AWS, OpenStack, VMware, etc
-        - オンプレ環境を含む既存のKubernetesクラスタをRancherで管理（クラスタのインポート機能）
-        - 複数クラスタにアプリケーションデプロイ可能
-        - 中央集権的な認証、モニタリング、WebIO
-        - 豊富なアプリケーションカタログ
-        - Istioとの統合・連携
-- その他の構築ツール
-    - Kubespray
-    - kube-aws
-    - kops
-    - OpenStack Magnum
+- Kubernetes構築ツール
+    - kubeadm
+        Kubernetesが公式に提供している構築ツール
+    - Flannel
+        - 基本的にDockerで起動したコンテナに付与されるIPアドレスはホストの外から疎通性のないInternalIPとなる。
+            - ノードを跨いでコンテナ同士が通信することはできない
+            - マルチノードのKubernetesクラスタとして成立させるには、各ホストのInternal Networkの接続性を確保する必要がある
+        - それらを解決する方法としてFlannelがある
+            - Flannelはノード間を繋ぐネットワークにかそうて系なトンネル（オーバーレイネットワーク）を構成する
+            - それによりKubernetesクラスタ内のPod同士の通信を実現する
+        - Flannel以外にもPodネットワークを実現する手段は複数ある
+    - Rancher
+        - オープンソースのコンテナプラットフォーム
+            - Rancher Labs社
+        - Rancher 2.0の特徴
+            - 複数クラスタの統合管理
+            - Kubernetesクラスタをさまざまなプラットフォームにデプロイ
+                - AWS, OpenStack, VMware, etc
+            - オンプレ環境を含む既存のKubernetesクラスタをRancherで管理（クラスタのインポート機能）
+            - 複数クラスタにアプリケーションデプロイ可能
+            - 中央集権的な認証、モニタリング、WebIO
+            - 豊富なアプリケーションカタログ
+            - Istioとの統合・連携
+    - その他の構築ツール
+        - Kubespray
+        - kube-aws
+        - kops
+        - OpenStack Magnum
+- パブリッククラウド上のマネージドKubernetesサービス
+    - GKE(Google Kubernetes Engine)
+        - 2015年8月にGA
+        - Kubernetes NodeにGCE（Google Compute Engine）を採用
+        - NodePool
+            - Kubernetesクラスタ内のノードに対してラベル付けをしておくことでグルーピングをするような機能
+            - `vCPU数の多いノード`,`メモリ容量の多いノード` のようにマシン性能が異なるノードをクラスタに混在させ、NodePoolによるラベル付をしておくことで、コンテナのスケジューリング時にデプロイ先の制約条件にすることが可能
+            - NodePoolの機能はGKE以外にもさまざまなマネージドKubernetesサービスで提供されている
+    - AKS(Azuru Kubernetes Service)
+        - 2018年6月にGA
+    - EKS(Amazon Elastic Kubernetes Service)
+        - 2018年６月にGA
+        - 通常はAMIから作成したEC2インスタンスをKubernetes Nodeとして利用する
+        - AWS FargateをKuernetes Nodeとして利用するEKS on Fargate もある
+- Kubernetes プレイグラウンド
+    https://labs.play-with-k8s.com/
