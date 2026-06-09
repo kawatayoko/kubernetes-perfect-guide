@@ -240,3 +240,15 @@ docker image push kawatayoko2/sample-image:0.1
         - AWS FargateをKuernetes Nodeとして利用するEKS on Fargate もある
 - Kubernetes プレイグラウンド
     https://labs.play-with-k8s.com/
+    最大で５台のインスタンスを起動でき、表示する手順に従ってkubeadmを使ってKubernetesクラスタを構築して使用できる
+    "play with kubernetes" は終了した。
+    今は、https://killercoda.com/　を利用するとよい。
+
+# 第４章 APIリソースとkubectl
+- kubectlのインストール
+    - kubectlにはシェル補完機能も用意されている
+        - bash 
+        `source <(kubectl comletion bash)`
+        - zsh
+        `source <(kubectl comletion zsh)`
+        - 補完を永続化するには、~/.bashrc ~/.zshrc に設定しておくこと
