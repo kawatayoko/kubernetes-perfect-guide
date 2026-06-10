@@ -252,3 +252,14 @@ docker image push kawatayoko2/sample-image:0.1
         - zsh
         `source <(kubectl comletion zsh)`
         - 補完を永続化するには、~/.bashrc ~/.zshrc に設定しておくこと
+- Kubernetesの基礎
+    - Kubernetesは以下２種類のノードから成り立っている
+        - Kubernetes Master
+            - APIエンドポイントの提供
+                - kubectlはマニフェストファイルの情報を元にAPIにリクエストを送っている
+                - RESTful APIで実装されているので、kubectlを使わずcurlなどで呼び出し可能
+            - コンテナのスケジューリング
+            - コンテナのスケーリング           
+        - Kubernetes Node
+            - コンテナが起動するノード
+
