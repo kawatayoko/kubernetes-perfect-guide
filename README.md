@@ -258,8 +258,55 @@ docker image push kawatayoko2/sample-image:0.1
             - APIエンドポイントの提供
                 - kubectlはマニフェストファイルの情報を元にAPIにリクエストを送っている
                 - RESTful APIで実装されているので、kubectlを使わずcurlなどで呼び出し可能
+                - kubernetes Masterにリソースの登録を行う
             - コンテナのスケジューリング
             - コンテナのスケーリング           
         - Kubernetes Node
             - コンテナが起動するノード
+- Kubernetesとリソース
+    - Kubernetesが扱うリソースの一覧はAPIリファレンスに公開されている
+        - https://kubernetes.io/docs/reference/kubernetes-api/?utm_source=chatgpt.com
+        - `kubectl api-resources`でも確認できる
+    - Workloads APIsカテゴリ
+        クラスタ上にコンテナを起動させるために利用するリソース
+        - Pod
+        - ReplicationController
+        - ReplicaSet
+        - Deployment
+        - DaemonSet
+        - StatefulSet
+        - Job
+        - CronJob
+    - Service APIsカテゴリ 
+        コンテナのサービスディスカバリ、クラスタ外部からアクセス可能なエンドポイントの提供
+        - Service
+            - ClusterIP
+            - ExternalIP
+            - NodePort
+            - LoadBalancer
+            - Headless
+            - ExternalName
+            - Non-Selector
+        - Ingress        
+    - Config&Storage APIs カテゴリ
+        設定や機密データをコンテナに埋め込んだり、永続ボリュームを提供する
+        - Secret
+        - ConfigMap
+        - PersistentVolumeClaim    
+    - Cluster APIs カテゴリ
+        クラスタ自体の振る舞いを定義
+        - Node
+        - Namespace
+        - PersistentVolume
+        など
+    - MetadataAPIs カテゴリ
+        クラスタ内の他のリソースの動作を制御するためのリソース
+        - LimitRange
+        - HorizontalPodAutoscaler
+        - PodDisruptionBudget
+        - CustomResourceDefinition
+
+
+
+
 
