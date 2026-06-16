@@ -322,9 +322,28 @@ docker image push kawatayoko2/sample-image:0.1
         - クラスタアップグレードの際、同時に全ての環境で障害が発生する可能性がある
         - Namespaceの命名規則がprd-nsl/stg-nslのようになることでマニフェストの再利用性が低下する。クラスタを分ければ各環境で同じNamespace名を使用できるため全く同一のマニフェストを利用できる
         - Serviceの名前解決時に「SERVICE.prd-nsl.svc.cluster.local」など異なる宛先に通信を行う必要がでてくる
-        
-    
-
+- CLIツール kubectl        
+    - Kubernetesではクラスタ操作はすべてKubernetes MasterのAPIを通して行われる
+        - kubectlを利用することが一般的
+        - kubeconfig(~/.kube.config)に接続先サーバ、認証情報を保存する 
+            - clusters
+            接続先クラスタの情報
+            - users
+            認証情報(X.509クライアント証明書・トークン・パスワード・Webhook)
+            - contexts
+            clusterとuserのペアとnamespaceを指定したものを定義
+        - kubectl は Context(current-context)を切り替えることで複数の環境を複数の権限で操作できる
+            - `kubectl config get-contexts`
+            Contextの一覧表示
+            - `kubectl config use-context prd-admin`
+            Contextの切り替え
+            - `kubectl config current-context`
+            現在のContextを表示
+        - kubectlの代わりに`kubectx`/`kubens`などを利用できる
+    - マニフェストとリソースの作成・削除更新
+        - kubectl create
+        - kubectl delete
+        - kubectl apply
 
 
 
