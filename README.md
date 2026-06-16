@@ -305,7 +305,25 @@ docker image push kawatayoko2/sample-image:0.1
         - HorizontalPodAutoscaler
         - PodDisruptionBudget
         - CustomResourceDefinition
-
+- Namespace
+    KubernetesにはNamespaceと呼ばれる仮想的なKubernetesクラスタの分離機能がある
+    完全な分離レベルではないので使い所は限られる
+    初期状態では4つのNamespaceが作成されている
+    - 4つのNamespace
+        - kube-system
+            Kubernetes Dashboardといったシステムコンポーネントやアドオンがデプロイされる
+        - kube-public
+            全ユーザーが利用するConfigMapなどを配置
+        - kube-node-lease
+            ノードのハートビート情報
+        - default
+    - 目的に応じて任意のNamespaceを作成できる。1つのKubernetesクラスタを複数の目的で共用利用する予定がない場合、デフォルトをそのま利用してOK
+    - 分割粒度はマイクロサービスを開発するチームごとにするのがよいが、筆者としてはクラスタごとわけるべき
+        - クラスタアップグレードの際、同時に全ての環境で障害が発生する可能性がある
+        - Namespaceの命名規則がprd-nsl/stg-nslのようになることでマニフェストの再利用性が低下する。クラスタを分ければ各環境で同じNamespace名を使用できるため全く同一のマニフェストを利用できる
+        - Serviceの名前解決時に「SERVICE.prd-nsl.svc.cluster.local」など異なる宛先に通信を行う必要がでてくる
+        
+    
 
 
 
