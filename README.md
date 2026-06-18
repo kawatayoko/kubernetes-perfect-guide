@@ -344,6 +344,9 @@ docker image push kawatayoko2/sample-image:0.1
         - kubectl create
         - kubectl delete
         - kubectl apply
-
+            リソース作成にもkubectl applyを使用した方がよい
+            差分適応をするする際、前回適応したマニフェストを参照するが、
+            `kubectl create --save-config` のように `--save-config`オプションをつけない場合にマニフェストが保存されず、前回適応したマニフェストを参照できない
+            
 
 
