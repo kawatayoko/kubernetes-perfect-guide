@@ -344,9 +344,14 @@ docker image push kawatayoko2/sample-image:0.1
         - kubectl create
         - kubectl delete
         - kubectl apply
+            - Client-side apply
             リソース作成にもkubectl applyを使用した方がよい
             差分適応をするする際、前回適応したマニフェストを参照するが、
             `kubectl create --save-config` のように `--save-config`オプションをつけない場合にマニフェストが保存されず、前回適応したマニフェストを参照できない
-            
-
+            - Server-side apply
+                - `--server-side`オプションを利用する
+                - kubectl.kubernetes.io/last-applied-configuration が不要
+    - Podの再起動
+        - DeploymentリソースのすべてのPodのリスタート
+        - `kubectl rollout restart deployment sample-deployment`
 
