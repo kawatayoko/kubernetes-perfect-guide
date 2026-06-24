@@ -354,4 +354,16 @@ docker image push kawatayoko2/sample-image:0.1
     - Podの再起動
         - DeploymentリソースのすべてのPodのリスタート
         - `kubectl rollout restart deployment sample-deployment`
+    - マニフェストファイルの設計
+        - 一つのマニフェストファイルの中に複数のリソースを記述
+            - 実行順序を厳密にしたい（上から順に実行される）場合、リソース間の結合が強い場合はマニフェストをまとめる
+            - 共通で利用する設定ファイルは別のマニフェストに分割すべき
+                - ConfigMapリソース
+                - Secretリソース
+        - 複数のアニフェスとファイルを同時に適応する
+            - ディレクトリは以下に複数ファイルを配置
+            - `kubectl apply`コマンド実行時にディレクトリを指定する
+            - `-R`オプションで再起的にディレクトリ内のマニフェストを適応可能
+                `kubectl apply -f ./ -R`
+
 
