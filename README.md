@@ -407,7 +407,8 @@ docker image push kawatayoko2/sample-image:0.1
                     - アプリケーションのバージョン
                         - app.kubernetes.io/version
                     - 環境
-
+        - ローカルマニフェストとKubernetes上の登録情報の差分取得
+            - `kubectl diff -f sample-pod.yaml`
 
         
 
