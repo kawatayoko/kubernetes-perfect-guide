@@ -365,5 +365,52 @@ docker image push kawatayoko2/sample-image:0.1
             - `kubectl apply`コマンド実行時にディレクトリを指定する
             - `-R`オプションで再起的にディレクトリ内のマニフェストを適応可能
                 `kubectl apply -f ./ -R`
+            - 一部ファイルに文法エラーなどの問題があると、そのファイル以外が適応される
+        - マニフェストファイルの設計指針 
+            - マイクロサービスアーキテクチャとの親和性が高い
+                - そこまで大きくない規模の場合
+                    - 全てのサービスのマニフェストを一つのディレクトリにまとめる
+                        - マニフェストファイルを指定して、特定のサービスをアップデート可
+                        - ディレクトリを指定して、システム全体のアップデートも可能
+                - 巨大なシステムの場合
+                    - サブシステムや部署ごとにディレクトリを分ける
+                        - 部署ごとに切れば、コンウェイの法則
+                    - マイクロサービスごとにディレクトリを切る
+        - アノテーション
+            - システムコンポーネントが利用するメタデータ
+                - metadata.annotations
+                - リソースに対するメモ書き
+                - 目的
+                    - システムコンポーネントのためにデータを保存する
+                        - kubectl.kubernetes.io/last-applied-configuration
+                        - システムコンポーネントが自動で付与する
+                        - ユーザーがannotationを付与していなくても様々なannotationが付与されている
+                    - 全ての環境では利用できない設定を行う
+                        - GKE/AKS/EKS などの環境特有の拡張機能が実装されている場合、その設定にアノテーションを使う
+                            - 例：Serviceリソース
+                                - GKEでは`Google Cloud Load Balancing`と連携
+                                - EKSでは`AWS Classic Load Balancer` or `Network Load Balancer`と連携
+                                    - さらにアノテーションを付与することでローカルIPアドレスをつかったエンドポイントの作成も可能
+                                        - service.bata.kubernetes.io/   aws-load-balancer-internal: 0.0.0/0
+                                    - CLB or NLBの選択
+                                        - service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+                    - 正式に組み込まれる前の機能の設定を行う
+        - ラベル
+            - リソースの管理(分別)に利用するメタデータ
+                - 開発者が利用するラベル
+                - システムが利用するラベル
+                    - プロジェクト
+                    - アプリケーションの種類
+                        - app.kubernetes.io/name
+                        - app.kubernetes.io/component (役割)
+                        - app.kubernetes.io/part-of  
+                    - アプリケーションのバージョン
+                        - app.kubernetes.io/version
+                    - 環境
+
+
+        
+
+
 
 
