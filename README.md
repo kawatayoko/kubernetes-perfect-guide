@@ -407,11 +407,48 @@ docker image push kawatayoko2/sample-image:0.1
                     - アプリケーションのバージョン
                         - app.kubernetes.io/version
                     - 環境
-        - ローカルマニフェストとKubernetes上の登録情報の差分取得
-            - `kubectl diff -f sample-pod.yaml`
-
-        
-
-
+    - ローカルマニフェストとKubernetes上の登録情報の差分取得
+        - `kubectl diff -f sample-pod.yaml`
+    - 利用可能なリソース種別の一覧
+        - `kubectl api-resources`
+        - Namespaceレベルのリソース
+            Podリソース, PersisteneVolumeClaimリソース
+        - Clusterレベルのリソース
+            Nodeリソース、PersistentVlumeリソース
+            すべてのNamespaceから共用して利用できる
+    - リソースの情報取得
+        - Podの一覧を表示
+        `kubectl get pods`
+        - 特定のPodの情報だけを表示
+        `kubectl get pod sample-pod`
+        - `-l` ラベルでフィルタリングできる
+        - `-o` JSON/YAML など様々な形式で出力可能
+        `wide` を指定すると詳細な情報を表示
+        `kubectl get pods -o wide`
+        `json` `yaml` で出力した場合、より詳細な情報を出力可能
+        - ノードの一覧表示
+            `kubectl get nodes`
+        - allを指定することでほぼすべての種類のリソースを表示
+            `kubectl get all`
+            Secret / ConfigMap / Ingress などよく利用するのに表示さないリソースも存在する
+    - リソースの詳細情報の取得　describe
+        - `kubectl describe pod sample-pod`
+        - `kubectl describe node xxxxx`
+    - 実際のリソースの使用量の確認 top
+        `kubectl describe`コマンドで確認できるリソースの使用量はkubernetesがPodに確保した値を示している
+        実際にPod内のコンテナが使用しているリソースの使用量は`kubectl top`で確認可能
+        リソースの使用量はノードとPod単位で確認する
+        - `kubectl top node`
+            ノードのリソース使用量を確認
+        - `kubectl top pod`
+            Podのリソースを確認
+            `--containers`オプションを使ってコンテナおとのリソース使用量を確認することも可能 
+    - コンテナ上でのコマンドの実行（exec）
+        - `kubectl exec　-it sample-pod --/bin/ls`
+        - /bin/bash など標準入出力が必要なプログラムなどでは「-i -t」オプションを付与する
+            - `-t` 擬似端末を生成
+            - `-i` 標準入力をパススルー
+            しながら/bin/sh を起動することで、コンテナにSSHログインしているような状態となる
+        - `kubectl exec -it sample-pod -- /bin/bash`
 
 
