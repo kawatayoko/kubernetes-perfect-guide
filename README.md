@@ -450,5 +450,18 @@ docker image push kawatayoko2/sample-image:0.1
             - `-i` 標準入力をパススルー
             しながら/bin/sh を起動することで、コンテナにSSHログインしているような状態となる
         - `kubectl exec -it sample-pod -- /bin/bash`
-
+    - Pod上にデバッグ用の一時的なコンテナの追加（debug）
+        - 軽量なイメージとして軽量なDistrolessやScratchイメージなどを利用している場合、`kubectl exec`コマンドを利用してコンテナの中に入ってもデバッグは困難
+        - その場合に`kubectl debug`コマンドを利用する
+            - Podに追加の一時的なコンテナ（Ephemeral Container）を起動
+            - そのコンテナを使ってデバッグやトラブルシューティングを行う
+            - `kubectl debug sample-pod --image=amsy810/tools:v2.0 -it -- bash`
+                - sample-podに任意のコマンドでデバッグ用コンテナを起動して接続
+    - ローカルマシンからPodへのポートフォワーディング（port-forward）
+        - `kubectl port-forward sample-pod 8888:80`
+            - localhost:8888 宛の通信が指定したPodの80/TCPポートに転送されるようになる
+        - pod名ではなく、DeploymentリソースやServiceリソースに紐づくPodに対してポートフォワーディングすることもできる
+            - `kubectl port-forward deploment/sample-deployment 8888:80`
+            - `kubectl port-forward service/sample-service 8888:80`
+        - `kubectl port-forward` 実行中に通信できるPodは常に同一の1つのPodのみ
 
