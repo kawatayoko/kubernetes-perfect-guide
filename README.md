@@ -464,4 +464,23 @@ docker image push kawatayoko2/sample-image:0.1
             - `kubectl port-forward deploment/sample-deployment 8888:80`
             - `kubectl port-forward service/sample-service 8888:80`
         - `kubectl port-forward` 実行中に通信できるPodは常に同一の1つのPodのみ
+    - コンテナのログ確認（logs）
+        - `kubectl logs`
+            - 標準出力と標準エラー出力を確認できる
+            - ログは標準出力と標準エラー出力に出力するのがベストプラクティス
+    - Sternによるログ確認
+        - Pod名を部分一致で検索し、一致したPodがログ表示の対象となる
+        - `kubectl logs`でできることはほぼ全てできる。他の機能は以下
+            - 各コンテナのログを時系列で表示
+            - タイムスタンプの表示 `--timestamps`
+            - 特定のラベルが付与されたPodのログのみ表示 `--selector`
+            - 除外するログを正規表現で指定可能 `--exclude`
+    - コンテナとローカルマシン間でのファイルのコピー：cp
+        - `kubectl cp sample-pod:etc/hostname ./hostname`
+            sample-pod内の/etc/hostnameファイルをローカルにコピー
+        - `kubectl cp hostname sample-pod:/tmp/newfile`
+            ローカルファイルをコンテナにコピー
+            
+
+            
 
