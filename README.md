@@ -480,7 +480,31 @@ docker image push kawatayoko2/sample-image:0.1
             sample-pod内の/etc/hostnameファイルをローカルにコピー
         - `kubectl cp hostname sample-pod:/tmp/newfile`
             ローカルファイルをコンテナにコピー
+    - kubectl のサブコマンド拡張プラグイン
+        - krewというプラグインマネージャによる管理が推奨されている
+            - krew サブコマンドのインストールが必要            
+        - krew に対応したプラグインはkubernetes-sigs/krew-indexリポジトリにリスト化されている
+    - kubectlにおけるデバッグ
+        - kubectlはKubernetes Master常のAPIと通信を行うことでクラスタ管理を実施している
+        - `-v`オプションでログレベルを指定し、処理内容を詳細にみることができる
+        - HTTP Request/Response の概要を表示する場合は、 `v=6`以降のログレベルを出力すること
+            - `kubectl -v=6 get pod`
+        - Response Body / Response Body まで確認する場合は `v=8`以降のログレベル
+            - `kubectl -v=8 apply -f sample-pod.yaml`
+        - リソースの情報を書き換える際はHTTP PATCHリクエストを使用し、Kubernetes独自のStrategic Merge Patchの処理が行われている
+    - その他のTIPS
+        - alias
+            - kubectl-aliases
+                - https://github.com/ahmetb/kubectl-aliases
+        - kube-psl
+            現在操作しているKubernetesクラスタ、Namespaceを表示する
+        - Podが起動しない場合のデバッグ
+            `kubectl logs`を使用し、コンテナが出力しているログを確認する方法
+            `kubectl describe`を使用し、Eventsの項目を確認する方法
+            `kubectl run`コマンドを使用し、コンテナ上のシェルで各院する方法
             
+
+
 
             
 
