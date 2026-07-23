@@ -548,7 +548,16 @@ docker image push kawatayoko2/sample-image:0.1
             - MySQLのメトリクスの出力フォーマットをPrometheusの形式に成形する
 - Podの作成
     - Podはネットワークの名前空間を共有している（同一IPアドレス）ため、通常のVM常で80/TCPポートをbindするサービスを2つ起動できない。
-    
+    - コンテナへのログイン
+        - kubectl exec -it sample-pod -- /bin/bash
+            - 擬似端末を生成し（-t）、標準入力をパススルー（-i）しながら /bin/bashを起動する
+    - Pod名に_は使えない
+    - Podに割り当てられるIPアドレス
+        - Kubernetes Node のホストのIPアドレスとはレンジが異なる
+        - 外部からは疎通性がないIPアドレスが払い出される
+        - ホストのネットワークを利用する設定（spec.hostNetwork）を有効化することで、ホスト常でただプロセスを起動するのと同じネットワーク構成でPodを起動させることができる
+            - hostNetworkを利用したPodはポート番号を衝突させられないため基本的には利用しない
+            - NodePort Serviceなどで解決できないか検討すること
 
             
 
