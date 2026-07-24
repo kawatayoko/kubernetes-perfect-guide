@@ -571,7 +571,10 @@ docker image push kawatayoko2/sample-image:0.1
             - ClusterFirstWithHostNet
                 - ClusterFirstと同等（HostNetwork利用時の設定）
                 - hostNetworkを利用している場合には、デフォルトのClusterFirstの設定は無視され、KubernetesNodeのネットワーク設定が利用されてしまうので、明治的に指定する必要がある
-                
+    - 静的な名前解決の設定
+        - /etc/hosts を書き換える機能がKubernetesに備わっている
+            - spec.hostAliases で指定
+
 
 
             
