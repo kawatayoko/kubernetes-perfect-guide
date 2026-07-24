@@ -558,6 +558,21 @@ docker image push kawatayoko2/sample-image:0.1
         - ホストのネットワークを利用する設定（spec.hostNetwork）を有効化することで、ホスト常でただプロセスを起動するのと同じネットワーク構成でPodを起動させることができる
             - hostNetworkを利用したPodはポート番号を衝突させられないため基本的には利用しない
             - NodePort Serviceなどで解決できないか検討すること
+    - PodのDNS設定（dnsPolicy）
+        - dnsPolicyの設定値
+            - ClusterFirst
+                - デフォルト
+                - クラスタ内のDNSに問い合わせ
+                - 解決できない場合は、アップストリームに問い合わせ
+            - None
+                - Pod定義内で静的に設定を行う
+            - Default
+                - Podが起動するKubernetes Nodeの/etc/resolv.confを引き継ぐ
+            - ClusterFirstWithHostNet
+                - ClusterFirstと同等（HostNetwork利用時の設定）
+                - hostNetworkを利用している場合には、デフォルトのClusterFirstの設定は無視され、KubernetesNodeのネットワーク設定が利用されてしまうので、明治的に指定する必要がある
+                
+
 
             
 
