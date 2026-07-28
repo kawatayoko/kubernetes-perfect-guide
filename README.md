@@ -574,7 +574,20 @@ docker image push kawatayoko2/sample-image:0.1
     - 静的な名前解決の設定
         - /etc/hosts を書き換える機能がKubernetesに備わっている
             - spec.hostAliases で指定
-
+## 5.3 ReplicaSet / ReplicationController
+- Podの停止とセルフヒーリング
+    - ReplicaSetではノードやPodに障害が発生した場合でも、Pod数が指定された数を満たすように別ノードでPodを起動する
+        - セルフヒーリング（Kubernetesの大事なコンセプトの一つ）
+- ReplicaSetとラベル
+    - ReplicaSetはKubernetesがPodの監視を行うことでPod数を調整している
+    - 監視を行う際は特定のラベルが付けられたPod数をカウントする 
+    - 複数のラベルを付与可能
+    ```
+    labels:
+        env: dev
+        codename: system_a
+        role: web-front
+    ```
 
 
             
