@@ -588,6 +588,17 @@ docker image push kawatayoko2/sample-image:0.1
         codename: system_a
         role: web-front
     ```
+- ReplicaSetのスケーリング
+    - ReplicaSetの設定を変更し、Podの数を変更するには？
+        - マニフェストを書き換えて `kubectl apply -f` を実行
+        - kubectl scaleコマンドを利用
+- equality-based条件とset-based条件
+    - equality-based
+        条件分に等価式のみ
+        `app=sample-app`
+    - set-based
+        条件分に等価式にくわえて集合値ベースの条件も記述可能
+        `env In [development,staging]`
 
 
             
