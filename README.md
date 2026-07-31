@@ -599,6 +599,28 @@ docker image push kawatayoko2/sample-image:0.1
     - set-based
         条件分に等価式にくわえて集合値ベースの条件も記述可能
         `env In [development,staging]`
+## 5.4 Deployment
+- Deployment
+    - 複数のReplicaSetを管理
+    - ローリングアップデート、ロールバックなどを実現するリソース
+    - Deploymentを使うと新しいReplicaSet上でコンテナが起動したこと、ヘルスチェックが通っていること、を確認しながら切り替えを実施する
+    - たとえ一つのPodを起動するだけでもDeploymentを利用するのが推奨される
+- Deploymentの作成
+- Deploymentのアップデート（ReplicaSetが作成される条件）
+    - spec.templateに変更があると、作成されるPodの設定が変わる
+        - ReplicaSetを新規で作成してローリングアップデートが行われる
+        - spce.template以下の構造体のハッシュ値（Pod Template Hash）を慶安し、それを利用したラベル付けで管理している(以下部分)
+        ```
+          template:
+            metadata:
+            labels:
+                app: sample-app
+            spec:
+            containers:
+            - name: nginx-container
+                image: nginx:1.16
+        ```
+        - hashとは、任意の長さのデータを決まった長さの値に変換すること
 
 
             
