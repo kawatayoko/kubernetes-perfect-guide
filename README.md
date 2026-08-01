@@ -621,6 +621,31 @@ docker image push kawatayoko2/sample-image:0.1
                 image: nginx:1.16
         ```
         - hashとは、任意の長さのデータを決まった長さの値に変換すること
+- Deploymentのアップデート戦略
+    - Recreate
+        - 一度全てのPodを削除してから再度Podを作成する
+        - ダウンタイムが発生する
+        - 余剰なリソースを使わない、切り替え完了が早い
+    - RollingUpdate
+        - 以下を設定する
+            - アップデート中に許容される不足Pod数（maxUnabailable
+            - 超過Pod数（maxSurge）
+            - `spec.strategy.type`にRollingUpdatewo指定する
+        - より詳細なアップデートパラメーター
+            - minReadySeconds
+            - revisionHistoryLimit
+                - Deploymentが保持するReplicaSetの数
+                - ロールバック可能な履歴数
+            - progressDeadlineSecond
+                - Recreate/RollingUpdate処理のタイムアウト時間
+                - タイムアウト時間が経過した場合、自動でロールバックされる
+- マニフェストを書かずにDeploymentを作成する
+    - `kubectl create deployement`                
+
+
+
+
+
 
 
             
