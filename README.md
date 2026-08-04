@@ -660,6 +660,11 @@ docker image push kawatayoko2/sample-image:0.1
         - これがデフォルト
         - 1ノードに複数の同一Podを作成できないため、maxSurge(超過可能Pod数)を設定不可
         - maxUnavailable（停止可能なPod数）のみを指定してRollingUpdateを行う
+## 5.6 StatefulSet
+データベースなどステートフルなワークロードに対応するためのリソース
+- ReplicaSetとの違い
+    - 作成されるPod名のSuffixは数字のインデックス
+    - データを永続化するための仕組みを有している
 
     
 
