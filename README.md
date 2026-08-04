@@ -641,7 +641,27 @@ docker image push kawatayoko2/sample-image:0.1
                 - タイムアウト時間が経過した場合、自動でロールバックされる
 - マニフェストを書かずにDeploymentを作成する
     - `kubectl create deployement`                
+## 5.5 DeamonSet
+- DaemonSetはReplicaSetの特殊な形
+- DaemonSetは各ノードにPodを一つづつ配置するリソース
+    - そのためレプリカ数は指定できない
+- Kubernetes Node を増やした際も、DeamonSetのPodは自動的に増えたノードで起動する
+- ユースケース
+    - 前ノード常で必ず動作させたいプロセスのために利用する
+        - 各Podが出力するログをホスト単位で収集するFluentd
+        - 各Podのリソース使用状況やノードの状態をモニタリングするDatadog
+- DaemonSetのアップデート戦略
+    - OnDelete
+        - DaemonSetのマニフェストが更新された際にPodの更新はせず、別の要因でPodが再作成されるときに新しい定義でPodを作成する
+        - Deploymentとは異なりDaemonSetは死活監視やログ転送といった用途に利用することが多いので、アップデートを次回再作成時や手動による任意のタイミングで実施できる
+        - 任意のタイミングでアップデートを行う場合は、DaemonSetに紐づくPodを`kubectl delete pod`コマンドにより手動で停止し、セルフヒーリングの機能によって新しいPodを作成する
+    - RollingUpdate
+        - 即時Podの更新を行う
+        - これがデフォルト
+        - 1ノードに複数の同一Podを作成できないため、maxSurge(超過可能Pod数)を設定不可
+        - maxUnavailable（停止可能なPod数）のみを指定してRollingUpdateを行う
 
+    
 
 
 
