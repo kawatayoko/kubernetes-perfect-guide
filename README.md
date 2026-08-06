@@ -665,7 +665,28 @@ docker image push kawatayoko2/sample-image:0.1
 - ReplicaSetとの違い
     - 作成されるPod名のSuffixは数字のインデックス
     - データを永続化するための仕組みを有している
-
+- StatefulSetの作成
+    - PersistentVolumeClaim
+        `kubectl et persistentvolumeclaims`
+    - PersistentVolume
+        `kubectl et persistentvolumes`
+- StatefulSetのスケーリング
+    - インデックス順に作成・削除される
+        - 0番目のPodは常に一番最初に作成され、一番最後に削除される
+        - 0番目のPodをマスターノードとするような冗長構成をもつアプリケーションに適している
+- StatefulSetのライフサイクル
+    - podManagementPolicy
+        - OrderedReady
+        - Parallel
+- StatefulSetのアップデート戦略
+    - OnDelete
+        - DaemonSetのマニフェストが更新された際にPodの更新はせず、別の要因でPodが再作成されるときに新しい定義でPodを作成する
+    - RollingUpdate
+        - 1つずつPodのアップデートを行う
+        - Partition
+            - この値を設定することで、全体のPodのうち、どのPodまでを更新するかを指定できる
+            - 部分的に更新を適応して様子をみる、といった安全性の高いやり方を行える
+            
     
 
 
