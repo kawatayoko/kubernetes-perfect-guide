@@ -686,7 +686,13 @@ docker image push kawatayoko2/sample-image:0.1
         - Partition
             - この値を設定することで、全体のPodのうち、どのPodまでを更新するかを指定できる
             - 部分的に更新を適応して様子をみる、といった安全性の高いやり方を行える
-            
+- StatefulSetの削除とPersistentVolumeの削除
+    - StatefulSetを作成するとPodに対してPersistentVolumeClaimeを設定可能なため、PersistentVolume（永続化領域）も同時に確保できる
+    - 確保した永続化領域はStatefulSetが削除されても同時に解放されることはない
+        - StatefulSetが永続化領域を解放する前にボリュームからデータをバックアップする猶予を与えるため
+        - 逆にいうとStatefulSetを削除後、StatefulSetがPersistentVolumeClaimで確保したPersistentVolumeを解放せずに再度StatefulSetを作成した場合、永続化領域のデータはそのまま
+
+
     
 
 
@@ -695,4 +701,8 @@ docker image push kawatayoko2/sample-image:0.1
 
 
             
-
+## 5.7 Job
+コンテナを利用して一度限りの処理を実行させるリソース
+N並列で時効しながら指定した回数のコンテナの実行（正常終了）を保証するリソース
+- ReplicaSetとの違いは「起動するPodが停止することを前提にしてつくられているか」
+- ReplicaSetと同様にPodを作成するリソース
