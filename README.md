@@ -706,3 +706,45 @@ docker image push kawatayoko2/sample-image:0.1
 N並列で時効しながら指定した回数のコンテナの実行（正常終了）を保証するリソース
 - ReplicaSetとの違いは「起動するPodが停止することを前提にしてつくられているか」
 - ReplicaSetと同様にPodを作成するリソース
+- restartPolicy
+    - Never
+        Pod障害時に新規のPodが作成される
+    - OnFailer
+        Pod障害時に再度同一のPodを利用する
+- タスク型とワークキュー型の並列実行
+    - completions
+        成功回数（この回数成功すれば終了する）
+    - parallelism
+        並列度
+    - backoffLimit
+        失敗を許容する回数
+    - One　Shot　Task：1回だけ実行するタスク
+        completions: 1
+        parallellism: 1
+        backoffLimit: 0
+    - Multi Task: N並列で実行するタスク
+        - completionsとparallelismを変更することで並列タスクを作成する
+        - completions: 5, parallelism:3 指定した場合、Podが5回正常終了するまで３並列で実行する
+    - Multi WorkQueue: N並列で実行するワークキュー
+        - 大きな処理全体が正常終了するまでいくつかの並列数で実行し続ける
+        - completionsを指定しない、parallelismだけを指定する
+        - parallelismで指定された並列数でPodを実行し、そのうち一つでも正常終了したら、それ以降はPodを作成しない
+        - その時点で実行中ののこりのPodは強制的に停止せず個々の処理が終了するまで動作し続ける
+        - ワークキュー型のJobを使用するには、なんらかのメッセージキューを利用する必要がある
+        - Pod内のアプリケーションはそのメッセージキューから繰り返しデータを取得し続けるように実装する
+    - Single Workqueue: 1個ずつ実行するワークキュー
+        - Multi WorkQueueの応用
+        - completionsを指定せず並列数に1を指定する
+        - あとから並列数を変更可
+- 一定期間後のJobの削除
+    - Jobは終了後に削除されず残り続けてしまう
+    - spec.ttlSecondsAfterFinished を設定し、Job終了後に一定秒数経過後削除される
+    
+
+
+
+
+    
+
+        
+
