@@ -739,6 +739,9 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
 - 一定期間後のJobの削除
     - Jobは終了後に削除されず残り続けてしまう
     - spec.ttlSecondsAfterFinished を設定し、Job終了後に一定秒数経過後削除される
+- マニフェストを書かずにJobを作成する
+    - `kubectl create job`コマンドを利用する
+    - `--from` オプションを用いてCronJobを元にJobを作成できる
     
 
 
