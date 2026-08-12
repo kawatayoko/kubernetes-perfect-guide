@@ -742,7 +742,36 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
 - マニフェストを書かずにJobを作成する
     - `kubectl create job`コマンドを利用する
     - `--from` オプションを用いてCronJobを元にJobを作成できる
-    
+## 5.7 CronJob
+- CronJobはCronの用意スケジュールされた時間にJobリソースを作成する
+    - CronJobがJobを管理し、JobがPodを管理する
+    - CronJobとJobの関係はDeploymentとReplicaSetの関係ににている
+- CronJobの作成
+    - spec.scheduleにはCronと同じフォーマットで時間の指定をする
+    ```
+    spec:
+        schedule: "*/1 * * * *"
+    ```
+- CronJobの一時停止
+    - メンテナンス等でJobが作成されて欲しくない場合はsuspend(一時停止)ができる
+    - `spec.suspend: true` に設定されているものはスケジュール対象からはずれる
+- CronJobを任意のタイミングで実行する
+    - `--from`オプションを利用するとCronJobを元にJobを作成可能
+    `kubectl create job sample-job-from-cronjob --from cronjob/sample-cronjob`
+- 同時実行に関する制御
+    - spec.concurrencyPolicy
+        - Allow : デフォルト
+            - 同時実行に対して制御なし
+        - Forbid
+            - 前のJobが終了していない場合、次のJobは実行しない（同時実行しない）
+        - Replace
+            - 前のJobを停止し（レプリカ数を0にする）、新たにJobを開始する
+- 実行開始期限に関する制御
+    - spec.startingDeadlineSeconds
+        - CronJobは指定した時刻になると、Kubernetes MasterがJobを作成する
+        - Kubernetes Masterが一時的にダウンしていた場合など、開始時刻が遅れた場合に許容できる秒数を指定可能
+        - デフォルトはどんなに開始時刻がおくれた場合でもJobを作成する
+        
 
 
 
