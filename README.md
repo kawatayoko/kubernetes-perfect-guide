@@ -771,7 +771,26 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
         - CronJobは指定した時刻になると、Kubernetes MasterがJobを作成する
         - Kubernetes Masterが一時的にダウンしていた場合など、開始時刻が遅れた場合に許容できる秒数を指定可能
         - デフォルトはどんなに開始時刻がおくれた場合でもJobを作成する
-        
+- CronJobの履歴
+    - spec.successfulJobsHistoryLimit
+        - 成功したJobを保zんする数
+    - spec.failedJobsHistoryLimit
+        - 失敗したJobを保存する数
+- WorkloadAPIのまとめ
+    - Deployment(Tier3)
+        - ReplicaSet(Tier2)
+            - Pod(Tier1)
+    - CronJob(Tier3)
+        - Job(Tier2)
+            - Pod
+    - DaemonSet(Tier2)
+        各ノードに1つづつPodを配置したい時に利用
+        - Pod
+    - StatefulSet(Tier2)
+        データの永続化などステートを持つワークロードに利用
+        - Pod
+    
+
 
 
 
