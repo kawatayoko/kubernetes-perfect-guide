@@ -839,7 +839,29 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
         - クラスタ内DNS
             - Serviceのエンドポイントに関するレコード（*.cluster.local）が保存されている
             - kubernetesクラスタ外については外部DNSに再起問い合わせをする
-            
+            - クラスタ内に一つのDNSがある
+        - Node Local DNS cache
+            - 大規模なクラスタでのパフォーマンス向上のため、各ノードのローカル上にDNSキャッシュサーバーを用意する仕組み
+## 6.3 ClusterIP Service
+- ClusterIP Serviceの作成
+    - type ClusterIP
+        - spec.ports[].port
+            - 受け付けるPort
+        - spec.ports[].targetPort
+            - 転送先のコンテナのPort
+- ClusterIPを固定したい場合
+    - spec.clusterIP を指定する
+        - すでに作成されているServiceに対してあとからClusterIPを変更することはできない
+        - kubectl applyで設定値を更新できるが、一部フィールド（ClusterIP含む）は変更できない
+- ExternalIP Service
+    - 特定のKubernetes NodeのIPアドレス:Portで受信したトラフィックをコンテナに転送する
+    - 特別な事情がない場合はExternalIPの代わりに後述するNodePort Serviceを利用すること
+    - spec.type: ClusterIP を指定
+        - spec.externalIPs:
+            - Kuberntes NodeのIPを指定
+        - spec.ports[].portにはKubernetes NodeのIPおよびClusterIPで受け付けるPort番号
+        - spec.ports[].targetPortは転送先のコンテナのPort番号を指定
+        
 
 
 
