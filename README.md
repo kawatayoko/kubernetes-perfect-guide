@@ -861,7 +861,17 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
             - Kuberntes NodeのIPを指定
         - spec.ports[].portにはKubernetes NodeのIPおよびClusterIPで受け付けるPort番号
         - spec.ports[].targetPortは転送先のコンテナのPort番号を指定
-        
+- NodePort Service
+    - EXternalIP Serviceに類似したService
+    - 前述したExternalIPは指定したKubernetes NodeのIPあどれす:Portで受信したトラフィックをコンテナに転送する
+    - spec.port[].port
+        - ClusterIPで受け付けるPort番号
+    - spec.ports[].targetPort
+        - 転送先のコンテナのPort番号
+    - spec.port[].nodePort
+        - 全Kubernetes NodeのIPアドエスで受け付けるPort番号
+    - ExternalIPとは異なり全Kubernetes NodeのIPアドレスでKubernetesクラスタ外からも疎通が可能
+    
 
 
 
