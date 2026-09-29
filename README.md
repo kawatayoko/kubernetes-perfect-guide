@@ -871,7 +871,23 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
     - spec.port[].nodePort
         - 全Kubernetes NodeのIPアドエスで受け付けるPort番号
     - ExternalIPとは異なり全Kubernetes NodeのIPアドレスでKubernetesクラスタ外からも疎通が可能
-    
+## 6.6 LoadBalancer Service
+- Kubernetesクラスタ外のロードバランサに外部疎通性のある仮想IPを払い出すことができる
+- NodePortやExternaIPでは結局のところいずれかのKubernetes Nodeに割り当てられたIPアドレス宛に通信を行うため、そのノードが単一障害点となってしまう。
+- LoadBalancerではKubernetes Node群とは別に外部のロードバランさを利用するのでノードの障害につよい
+
+- LoadBalancer Serviceの作成
+    - spec.ports[].port
+        - LoadBalancer, ClusterIPで受け付けるポート番号
+    - spec.ports[].targetPort
+        - コンテナが受け付けるポート番号
+    - spec.portsp[].nodePort
+        - 全てのKubernetes Nodeで受け付けるポート番号
+- LoadBalancerのファイアウォールルールの設定
+    - LoadBalancer Serviceを作成すると、デフォルトではそのServieは全世界に公開される
+    - GKE, Amazon
+        - LoadBlancer Serviceのspec.loadBalancerSourceRangesに接続を許可する送信元ネットワークを指定できる
+        - Kubernetesクラスタ外の外部のロードバランサにクラウドプロバイダの提供するファイアウォール機能をりようしてアクセス制限できる
 
 
 
