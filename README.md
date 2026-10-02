@@ -888,9 +888,22 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
     - GKE, Amazon
         - LoadBlancer Serviceのspec.loadBalancerSourceRangesに接続を許可する送信元ネットワークを指定できる
         - Kubernetesクラスタ外の外部のロードバランサにクラウドプロバイダの提供するファイアウォール機能をりようしてアクセス制限できる
-
-
-
+## 6.7 Serviveのその他の機能
+- セッションアフィニティ
+    - 同一セッションのリクエストを一定時間内は同一Podに転送する、設定
+        - sticky sessionみたいなもの？
+    - ClusterIP Service, NodePort Service
+- ノード間通信の排除と送信元IPアドレスの保持
+    - 2段階ロードバランシング
+        - LoadBalancerでバランシングしたものを、Nodeでバランシング
+        - レイテンシのオーバーヘッドが発生
+        - バランシングが行われる際にNATされるので送信元IPアドレスが消失する
+- spec.externalTraffiPolicy
+    - Cluster(デフォルト)
+        - ノード到達後に他のノードいあるPodも含めて再ロードバランシングを行いPodへの負荷を均等にする
+    - Local
+        - ノード到達後にノードを跨いだロードバランシングを行わない
+    - Node Servvice, LoadBalancer Serviceで利用可能
 
 
     
