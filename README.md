@@ -904,9 +904,40 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
     - Local
         - ノード到達後にノードを跨いだロードバランシングを行わない
     - Node Servvice, LoadBalancer Serviceで利用可能
-
-
-    
+## 6.8 Headless Service
+    - 対象となる個々のPodのIPアドレスが直接返ってくるサービス
+        - いままで説明した各ServiceのIPエンドポイント
+            - ClusterIP
+                - Kubernetes Cluster内でのみ疎通可能な仮想IP
+            - ExternalIP
+                - 特定のKubernetes NodeのIP
+            - NodePort
+                - 全KubernetesNodeの全IPアドレス（0.0.0.0）
+            - LoadBalancer
+                - クラスタ外で提供されているLoadBalancerの仮想IP
+    - DNS Round Robinをつかったエンドポイントを提供する
+        - 転送先のPodのIPアドレスがクラスタ内DNSから帰ってくる形で負荷分散が行われる
+            - クライアント側でのDNSキャッシュに注意！
+    - StatefulSetがHeadless Serviceを利用している場合に限り、Pod名によるIPアドレスのディスカばりが可能
+- Headless Seviceの作成
+    - 以下二つの条件が必要
+        - Serviceのspec.typeがClusterIPであること
+        - Serviceのspec.clusterIPがNoneであること
+        - (option) Serviceのmetadata.nameがStatefulSetのspec.serviceNameと同じであること
+- Headless ServiceによるPod名の名前解決
+    - [Service名].[Namespace名].svc.cluster.local でServiceの名前解決ができる
+    - StatefulSetがHeadlessServiceを利用しており、Serviceのmetadata.nameがStatefulSetのspec.serviceNameと同じ場合は、追加で下記のようにPod単位での名前解決がおこなえるようになっている
+        - [Pod名].[Service名].[Namespace名].svc.cluster.local    
+- StatefulSet以外のPod名の名前解決
+     - Podに追加の設定を行うことでもPod名の名前解決が可能
+        - Podに対して以下設定を追加する
+            - spec.hostname
+            - spec.subdomain　（Headless Service名と同じ）
+        - 設定を行うと、下記のようにPod単位での名前解決が行える
+            - [Hostname名].[SubDomain/Service名].[Namespace名].svc.cluster.local
+        - Deploymentでは以下理由により、Pod名での名前解決は負荷
+            - 複数レプリカで同一hostnameしか設定できない
+            - 同一hostnameが指定されている場合、1つのAレコードのみを返却する
 
         
 
