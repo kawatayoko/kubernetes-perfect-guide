@@ -938,7 +938,7 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
         - Deploymentでは以下理由により、Pod名での名前解決は負荷
             - 複数レプリカで同一hostnameしか設定できない
             - 同一hostnameが指定されている場合、1つのAレコードのみを返却する
-# 6.9 ExternalNameService
+## 6.9 ExternalNameService
 - Service名の名前解決に対して外部ドメイン宛のCNAMEを返す
     - ExternaNameを利用すると、アクセス先の切り替えをExternalName Serviceの変更おだけで済む
     - アクセス先への切り替え対応がKubernetes上のオペレーションで完結するため、外部サービスとの疎結合性を保てる
@@ -948,6 +948,13 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
         - アプリ側の改修をせずに内部・外部を切り替えられる
 - ExternalNameServiceの作成
     - spec.externalName に CNAME用のFQDNが表示される
+
+## 6.10 None-Selector Service
+- クライアントサイドロードバランシング用のエンドポイントを提供する
+- None-Selector ServiceではClusterIPのAレコードが返る
+    - KubernetesのServiceの使用感のまま外部向けにロードバランシングを行える
+- None-Selector Serviceの作成
+    - ServviceとEndpointリソースを作成する
 
 
         
