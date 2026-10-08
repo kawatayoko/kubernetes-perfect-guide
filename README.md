@@ -956,6 +956,37 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
 - None-Selector Serviceの作成
     - ServviceとEndpointリソースを作成する
 
+## 6.11 Ingress
+- IngressはL7のロードバランシングを提供するリソース
+    - いままで説明してきたServiceはL4ロードバランシング
+    - kind: Ingress タイプのリソース
+- リソースとコントローラー
+    - kubernetesは分散システム
+        - マニフェストで定義したリソースをKubernetesに登録するところから始まる
+        - 実際に処理をおこなうコントローラーと呼ばれるシステムコンポーネントが必要
+            - 例
+            Deploymentには対応したReplicaSetを作成したり、レプリカ数を変更しながらローリングアップデートを行うDeploymentControllerと呼ばれるコンポーネントがKubernetesクラスタ常で動作している
+- IngressリソースとIngress Controller
+    - Ingressリソース
+        マニフェストで登録されるAPIリソースのこと
+    - Ingress Controller
+        IngressリソースがKubernetesに登録された際、なんらかの処理をおこなうもの
+- Ingressの種類
+    - クラスタ外のロードバランサを利用したIngress
+        - GKE Ingress
+        - Ingressリソースを作成するだけでLoadBlancerの仮装IPが払いだれて利用可能になる
+            - Ingress -> 各NodePort -> 各Pod
+    - クラスタ内にIngress用のPodをデプロイするIngress
+        - Nginx Ingress
+        - クラスタ内にIngress用のPodを作成する必要がある
+        - 作成したIngress用のPodに対してクラスタ外からアクセスできるように別途Ingress用ののPod宛にLoadBalancer Serrviceを作成する必要がある    
+- Ingress Controllerのデプロイ
+    Ingress利用のためいずれかのIngressControllerをデプロイする必要がある
+    - GKE　Ingress Controllerのデプロイ
+        HttpLoadBlanvingアドオンを有効化すればOK
+    - Nginx Ingress Controllerのデプロイ
+
+
 
         
 
