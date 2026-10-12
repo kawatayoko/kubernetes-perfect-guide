@@ -985,8 +985,17 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
     - GKE　Ingress Controllerのデプロイ
         HttpLoadBlanvingアドオンを有効化すればOK
     - Nginx Ingress Controllerのデプロイ
-
-
+- Ingressリソースを作成する前の事前準備
+    - Ingressは事前に作成されたServiceをバックエンドとして転送を行う仕組み
+        - バックエンドで利用するサービスは`type:NodePort`である必要がある
+        - Ingressリソースに必要なのはServiceリソースのみ
+        - 例: 以下の3つのServiceとPodのペアを作成し、そのあとIngressリソースで振り分けを行う
+            - `sample-ingress-svc-1 Service` -> `sample-ingress-apps1 Pod`
+            - `sample-ingress-svc-2 Service` -> `sample-ingress-apps2 Pod`
+            - `sample-ingress-default Service` -> `sample-ingress-default Pod`
+    - IngressでHTTPを利用する場合
+        - 事前に証明書をSecretリソースとして作成しておく必要がある
+        
 
         
 
