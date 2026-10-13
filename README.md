@@ -995,7 +995,17 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
             - `sample-ingress-default Service` -> `sample-ingress-default Pod`
     - IngressでHTTPを利用する場合
         - 事前に証明書をSecretリソースとして作成しておく必要がある
-        
-
+- Ingress リソースの作成
+    - リクエストパス -> Serviceのバックエンド　のペアで転送ルールを設定する
+- X-Forwarded-Fpr(XFF)ヘッダによるクライアントIPアドレスの参照
+    - Ingress経由で送られるトアフィックには基本的に「X-Forwarded-For」ヘッダが付与されている
+        - クライアントIPアドレスが参照可能
+- Ingress ClassによるIngressの分割
+    - Ingress Controllerはクラスタに登録されたIngressリソースを全て見るので、衝突する可能性がある
+    - そういう場合に、Ingress ClassでIngressリソースを分割する
+    - IngressリソースにIngress Classのアノテーションを付与し、Nginx Ingress Controllerに対象とするIngressClassを設定することで対象の分離を行える
+        - Nginx Ingress Controllerの起動時に `--ingress-class`オプションを付与
+            - /nginx-ingress-controller --ingress-class=system_a
+        - Ingressリソースにannotationsをつける      
         
 
