@@ -1007,5 +1007,37 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
         - Nginx Ingress Controllerの起動時に `--ingress-class`オプションを付与
             - /nginx-ingress-controller --ingress-class=system_a
         - Ingressリソースにannotationsをつける      
-        
+# 第７章　Config & Storage APIs カテゴリ
+## 7.1 概要
+- Config & Storage APIs カテゴリ
+    - コンテナに対する設定ファイル、パスワードなどの機密情報のインジェクト
+    - 永続化ボリュームを提供
+    - 以下3つのリソースがある
+        - Secret
+        - ConfigMap
+        - PersitentVolumeClaim
+## 7.2 閑居変数の利用
+- Kubernetesでは個別のコンテナにたいする設定の内容は環境変数やファイルが置かれた領域をマウントして渡すことが一般的
+- Kubernetesでの環境変数の扱い
+    - Podテンプレートにenv,またはenvFromを指定する
+    - 5つの情報源から環境変数を埋め込むことが可能
+        - 静的設定
+        - Podの情報
+        - コンテナの情報
+        - Secretリソースの機密情報
+        - ConfigMapリソースの設定値
+- 静的設定
+    - spec.containers[].envに静的な値として定義
+- Podの情報
+    - fieldRef で参照可
+    - `kubectl get pods -o yaml`
+        - Pod自身のIPアドレス、起動時間などのPodにかんする情報を参照できる
+- コンテナの情報
+    - resourceFieldRef で参照可
+    - `kubectl get pods -o yaml`
+    - Podには複数コンテナの情報が含まれており、各コンテナに関する情報についてはfieldRefでは参照できない
+- ConfigMapリソースの設定値
+    - Key-Value値
+    - ConfigMapを使えば、複数のPodで重複がある場合に一括で変更できる
+
 
