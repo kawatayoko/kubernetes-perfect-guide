@@ -1039,5 +1039,71 @@ N並列で時効しながら指定した回数のコンテナの実行（正常�
 - ConfigMapリソースの設定値
     - Key-Value値
     - ConfigMapを使えば、複数のPodで重複がある場合に一括で変更できる
+# 7.3 Secret
+MySQLデータベースなどに対して接続する際には、ユーザ名やパスワードの機密情報が必要
+Kubernetes上でアプリケーションを実行する場合に機密情報をコンテナに渡す手段は？
+- Dockerビルド時にコンテナイメージに埋め込む
+    - イメージビルド時にアプリケーション側やコンテナの環境変数、および実行引数などいパスワードなどを埋め込む
+    - イメージ自体に機密情報が入るとDockerレジストリ（Dockerイメージを保持するリポジトリ）に機密情報ごとアップロードすることになる
+- PodやDeploymentのマニフェストに記載して渡す
+    - マニフェスト自体に機密情報がはいってしまうので、マニフェストの管理が困難になる
+- ユーザ名やパスワードの機密情報を別リソースとして定義しておきPodから読み込むことができる。それがSecretリソース
+    - Secretを定義いているマニフェストはbase64でエンコードされている
+    - マニフェストをGitリポジトリ上にアップロードできない
+- Secretの分類
+    - Opaque
+        - 一般的な汎用用途
+    - kubernetes.io/tls
+        - TLS証明書用
+    - kubernetes.io/basic-auth
+        - Basic認証用
+    - kubernetes.io/dockerconfigjson
+        - Dockerレジストリの認証情報用
+    - kubernetes.io/ssh-auth
+        - SSHの認証情報用
+    - kubernetes.io/service-account-token
+        - Service Accountのトークン用
+    - bootstrap.kubernets.io/token
+        - Bootstrapトークン用
+- 一般的な汎用用途のSecret（Opaque）
+    - kubectlでファイルから値を参照して作成（--from-file）
+        - 末尾に改行がはらないように注意
+        ```
+        echo -n "root" > ./username
+        echo -ne "rootpassword" > ./password
+        kubectl create secret generic --save-config sample-db-auth \
+        -- from-file=./username --from-file=./password
+        # Secretの確認
+        kubectl get secret sample-db-auth -o json | jq .data
+        ```    
+    - kubectlでenvfileから値を参照して作成（--from-env-file）
+        - 一つのファイルから一括で作成する場合、envfileから作成する方法がある
+        - Dockerで「--env-file」オプションを使ってコンテナを起動した場合はこの方法で移行できる
+        ```
+        username=root
+        password=rootpassword
+        ```
+        ```
+        kubecctl ceate secret generic --save-config sample-db-auth --from-env-file ./env-secret.txt
+        ```
+    - kubectlで直接値を渡して作成(--from-literal)
+        ```
+        kubectl create secret generic --save-config cample-db-auth \
+            --from-literal=username=root --from-literal=password=rootpassword
+        ```
+    - マニフェストから作成(-f)
+        sample-db-auth.yaml
+        ```
+        apiVersion: v1
+        kind: Secret
+        metadata:
+            name: sampe-db-auth
+        type:Opaque
+        data:
+            username: m9vdA==
+            password: cm9vdHBhc3N3b3Jk
+        ```
+
+
 
 
