@@ -1103,6 +1103,26 @@ Kubernetes上でアプリケーションを実行する場合に機密情報を�
             username: m9vdA==
             password: cm9vdHBhc3N3b3Jk
         ```
+- TLSタイプぼSecret
+    - 証明書として利用するSecretを作成する場合、typeにtlsを指定
+    - TLSタイプのSecretはIngressリソースなどから利用可能
+- コンテナレジストリがプライベートリポジトリの場合Dockerイメージ取得時に認証が必要
+    - Kubernetesでは認証情報をSecretとして定義し、利用できる
+    - type: docker-registryを指定する
+        - ~/docker/config.json ファイルの代替として利用
+- Secretの利用
+    - 環境変数として渡す
+        - Secertの特定のKeyのみ
+            - spec.containers[].env
+                - valueFrom.secretKeyRef を利用
+        - SecretのすべてのKey
+            - spec.containers[].envFrom
+                - secretRef
+    - Volumeとしてマウントする
+        - Secretの特定のKeyのみ
+        - SecretのすべてのKey
+
+
 
 
 
